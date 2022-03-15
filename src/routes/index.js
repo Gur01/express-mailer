@@ -11,30 +11,39 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const mailOptions = {
-  from: 'air.cleaning.profi@gmail.com',
-  to: 'v-gurov@yandex.ru',
-  subject: 'Sending Email using Node.js',
-  text: 'That was easy!'
-};
+
 
 
 const router = express.Router();
 
 router.get('/', function(req, res, next) {
   console.log(req.body);
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
-  });
+
+  // transporter.sendMail(mailOptions, function(error, info){
+  //   if (error) {
+  //     console.log(error);
+  //   } else {
+  //     console.log('Email sent: ' + info.response);
+  //   }
+  // });
   res.send('<h1>hello</h1>');
 });
 
 router.post('/api/mail', function(req, res, next) {
   console.log(req.body);
+
+  const {name, phone, message} = req.body;
+
+  const mailOptions = {
+    from: 'air.cleaning.profi@gmail.com',
+    to: 'v-gurov@yandex.ru',
+    subject:` Новое вообщение от ${name}`,
+    text: `от: ${name}
+          телефон: ${phone}
+          сообщение: ${message}
+          `
+  };
+
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
@@ -42,7 +51,8 @@ router.post('/api/mail', function(req, res, next) {
       console.log('Email sent: ' + info.response);
     }
   });
-  res.json('index').end();
+  
+  res.json(mailOptions).end();
 });
 
 export default router;
