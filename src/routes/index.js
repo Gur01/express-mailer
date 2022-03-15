@@ -21,6 +21,18 @@ const mailOptions = {
 
 const router = express.Router();
 
+router.get('/', function(req, res, next) {
+  console.log(req.body);
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  res.send('<h1>hello</h1>');
+});
+
 router.post('/api/mail', function(req, res, next) {
   console.log(req.body);
   transporter.sendMail(mailOptions, function(error, info){
